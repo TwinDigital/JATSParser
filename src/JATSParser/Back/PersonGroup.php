@@ -1,7 +1,9 @@
-<?php namespace JATSParser\Back;
+<?php
+namespace JATSParser\Back;
 
-interface PersonGroup {
+interface PersonGroup
+{
 
-	public function getType();
+    public function getType();
 
 }

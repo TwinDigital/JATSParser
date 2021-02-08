@@ -1,81 +1,85 @@
-<?php namespace JATSParser\Body;
+<?php
+namespace JATSParser\Body;
 
 use JATSParser\Body\JATSElement as JATSElement;
 use JATSParser\Body\Text as Text;
 use JATSParser\Body\Par as Par;
 
-class Cell extends AbstractElement {
+class Cell extends AbstractElement
+{
 
-	/* @var array Can contain Par and Text */
-	private $content = array();
+    /* @var array Can contain Par and Text */
+    private $content = array();
 
-	/* @var $type string  */
-	private $type;
+    /* @var $type string */
+    private $type;
 
-	/* @var $colspan int  */
-	private $colspan;
+    /* @var $colspan int */
+    private $colspan;
 
-	/* @var $rowspan int  */
-	private $rowspan;
+    /* @var $rowspan int */
+    private $rowspan;
 
-	function __construct(\DOMElement $cellNode) {
-		parent::__construct($cellNode);
-		
-		$this->type = $cellNode->nodeName;
+    function __construct(\DOMElement $cellNode)
+    {
+        parent::__construct($cellNode);
 
-		$content = array();
-		$xpath = Document::getXpath();
-		$childNodes = $xpath->query("child::node()", $cellNode);
-		foreach ($childNodes as $childNode) {
-			if ($childNode->nodeName === "p") {
-				$par = new Par($childNode);
-				$content[] = $par;
-			} else {
-				$jatsTextNodes = $xpath->query(".//self::text()", $childNode);
-				foreach ($jatsTextNodes as $jatsTextNode){
-					$jatsText = new Text($jatsTextNode);
-					$content[] = $jatsText;
-				}
-			}
-		}
+        $this->type = $cellNode->nodeName;
 
-		$this->content = $content;
+        $content    = array();
+        $xpath      = Document::getXpath();
+        $childNodes = $xpath->query("child::node()", $cellNode);
+        foreach ($childNodes as $childNode) {
+            if ($childNode->nodeName === "p") {
+                $par       = new Par($childNode);
+                $content[] = $par;
+            } else {
+                $jatsTextNodes = $xpath->query(".//self::text()", $childNode);
+                foreach ($jatsTextNodes as $jatsTextNode) {
+                    $jatsText  = new Text($jatsTextNode);
+                    $content[] = $jatsText;
+                }
+            }
+        }
 
-		$cellNode->hasAttribute("colspan") ? $this->colspan = $cellNode->getAttribute("colspan") : $this->colspan = 1;
+        $this->content = $content;
 
-		$cellNode->hasAttribute("rowspan") ? $this->rowspan = $cellNode->getAttribute("rowspan") : $this->rowspan = 1;
+        $cellNode->hasAttribute("colspan") ? $this->colspan = $cellNode->getAttribute("colspan") : $this->colspan = 1;
 
-	}
+        $cellNode->hasAttribute("rowspan") ? $this->rowspan = $cellNode->getAttribute("rowspan") : $this->rowspan = 1;
+    }
 
-	/**
-	 * @return array
-	 */
+    /**
+     * @return array
+     */
 
-	public function getContent(): array {
-		return $this->content;
-	}
+    public function getContent(): array
+    {
+        return $this->content;
+    }
 
-	/**
-	 * @return string
-	 */
+    /**
+     * @return string
+     */
 
-	public function getType(): string {
-		return $this->type;
-	}
+    public function getType(): string
+    {
+        return $this->type;
+    }
 
-	/**
-	 * @return int
-	 */
-	public function getColspan(): int
-	{
-		return $this->colspan;
-	}
+    /**
+     * @return int
+     */
+    public function getColspan(): int
+    {
+        return $this->colspan;
+    }
 
-	/**
-	 * @return int
-	 */
-	public function getRowspan(): int
-	{
-		return $this->rowspan;
-	}
+    /**
+     * @return int
+     */
+    public function getRowspan(): int
+    {
+        return $this->rowspan;
+    }
 }

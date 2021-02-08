@@ -1,6 +1,8 @@
-<?php namespace JATSParser\HTML;
+<?php
+namespace JATSParser\HTML;
 
 
-interface HTMLElement {
+interface HTMLElement
+{
 
 }

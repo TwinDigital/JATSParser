@@ -1,15 +1,17 @@
-<?php namespace JATSParser\Back;
+<?php
+namespace JATSParser\Back;
 
-interface Reference {
+interface Reference
+{
 
-	public function getId();
+    public function getId();
 
-	public function getTitle();
+    public function getTitle();
 
-	public function getAuthors();
+    public function getAuthors();
 
-	public function getEditors();
+    public function getEditors();
 
-	public function getYear();
+    public function getYear();
 
 }

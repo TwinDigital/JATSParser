@@ -1,7 +1,9 @@
-<?php namespace JATSParser\Body;
+<?php
+namespace JATSParser\Body;
 
-interface JATSElement {
+interface JATSElement
+{
 
-	public function getContent();
+    public function getContent();
 
 }

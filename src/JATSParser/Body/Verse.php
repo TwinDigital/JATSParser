@@ -1,31 +1,35 @@
-<?php namespace JATSParser\Body;
+<?php
+namespace JATSParser\Body;
 
 use JATSParser\Body\Document as Document;
 use JATSParser\Body\Text as Text;
 
-class Verse extends AbstractElement {
+class Verse extends AbstractElement
+{
 
-	private $content = array();
-	private $attrib;
+    private $content = array();
+    private $attrib;
 
-	public function __construct(\DOMElement $element) {
-		parent::__construct($element);
+    public function __construct(\DOMElement $element)
+    {
+        parent::__construct($element);
 
-		$verseItemNodes = $this->xpath->query("verse-line", $element);
-		foreach ($verseItemNodes as $verseItemNode) {
-			$verseItem = $this->extractFormattedText(".", $verseItemNode);
-			$this->content[] = $verseItem;
-		}
+        $verseItemNodes = $this->xpath->query("verse-line", $element);
+        foreach ($verseItemNodes as $verseItemNode) {
+            $verseItem       = $this->extractFormattedText(".", $verseItemNode);
+            $this->content[] = $verseItem;
+        }
 
-		$this->attrib = $this->extractFormattedText(".//attrib", $element);
+        $this->attrib = $this->extractFormattedText(".//attrib", $element);
+    }
 
-	}
+    public function getContent(): array
+    {
+        return $this->content;
+    }
 
-	public function getContent(): array {
-		return $this->content;
-	}
-
-	public function getAttrib(): array {
-		return $this->attrib;
-	}
+    public function getAttrib(): array
+    {
+        return $this->attrib;
+    }
 }
