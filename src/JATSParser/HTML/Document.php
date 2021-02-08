@@ -2,27 +2,36 @@
 
 namespace JATSParser\HTML;
 
+use DOMDocument;
+use DOMElement;
+use DOMNode;
+use DOMXPath;
 use JATSParser\Body\DispQuote;
 use JATSParser\Body\Document as JATSDocument;
 use JATSParser\HTML\Par as Par;
 use JATSParser\HTML\Listing as Listing;
 use Seboettg\CiteProc\StyleSheet;
 use Seboettg\CiteProc\CiteProc;
+use stdClass;
 
 define('JATSPARSER_CITEPROC_STYLE_DEFAULT', 'vancouver');
 define('JATSPARSER_CITEPROC_LANG_DEFAULT', 'en-US');
 define('JATSPARSER_REFERENCE_ELEMENT_ID', 'referenceList'); // Document::getRawReferences() linked to this id
 
-class Document extends \DOMDocument
+/**
+ * Class Document
+ * @package JATSParser\HTML
+ */
+class Document extends DOMDocument
 {
 
     /** @var $citationStyle string */
-    var $citationStyle;
+    public $citationStyle;
 
-    var $citeProcReferences;
-    var $styleInTextLinks;
-    var $citationLang;
-    var $jatsDocument;
+    public $citeProcReferences;
+    public $styleInTextLinks;
+    public $citationLang;
+    public $jatsDocument;
 
     public function __construct(JATSDocument $jatsDocument)
     {
@@ -53,15 +62,21 @@ class Document extends \DOMDocument
         }
     }
 
+    /**
+     * @return false|string
+     */
     public function getHmtlForGalley()
     {
         return $this->saveHTML();
     }
 
+    /**
+     * @return string|string[]|null
+     */
     public function getHtmlForTCPDF()
     {
         // set text-wide styles;
-        $xpath          = new \DOMXPath($this);
+        $xpath          = new DOMXPath($this);
         $referenceLinks = $xpath->evaluate("//a[@class=\"bibr\"]");
         foreach ($referenceLinks as $referenceLink) {
             $referenceLink->setAttribute("style", "background-color:#e6f2ff; color:#1B6685; text-decoration:none;");
@@ -117,7 +132,7 @@ class Document extends \DOMDocument
 
         $tableCaptions = $xpath->evaluate("//table/caption");
         foreach ($tableCaptions as $tableCaption) {
-            /* @var $tableNode \DOMNode */
+            /* @var $tableNode DOMNode */
             $tableNode       = $tableCaption->parentNode;
             $divNode         = $this->createElement("div");
             $nextToTableNode = $tableNode->nextSibling;
@@ -138,8 +153,9 @@ class Document extends \DOMDocument
 
     /**
      * @param $articleSections array;
+     * @param DOMElement|null $element
      */
-    protected function extractContent(array $articleSections, \DOMElement $element = null): void
+    protected function extractContent(array $articleSections, DOMElement $element = null): void
     {
         if ($element) {
             $parentEl = $element;
@@ -257,7 +273,7 @@ class Document extends \DOMDocument
         ];
 
         $citeProc   = new CiteProc($style, $this->citationLang, $additionalMarkup);
-        $htmlString = $citeProc->render($data, 'bibliography');
+        $htmlString = $citeProc->render($data);
 
         if ($this->styleInTextLinks) {
             $this->setInTextLinks($citeProc, $data);
@@ -266,9 +282,14 @@ class Document extends \DOMDocument
         $this->getCiteBody($htmlString, $rawData);
     }
 
+    /**
+     * @param string $htmlString
+     * @param array $rawData
+     * @return void
+     */
     protected function getCiteBody(string $htmlString, array $rawData)
     {
-        $document = new \DOMDocument('1.0', 'utf-8');
+        $document = new DOMDocument('1.0', 'utf-8');
         $document->loadXML($htmlString);
 
         $listEl = $this->createElement('ol');
@@ -276,7 +297,7 @@ class Document extends \DOMDocument
         $listEl->setAttribute('id', JATSPARSER_REFERENCE_ELEMENT_ID);
         $this->appendChild($listEl);
 
-        $xpath       = new \DOMXPath($document);
+        $xpath       = new DOMXPath($document);
         $listItemEls = $xpath->query('//li');
         foreach ($listItemEls as $listItemEl) {
             $newListItemEl = $this->createElement('li');
@@ -309,14 +330,19 @@ class Document extends \DOMDocument
         }
     }
 
+    /**
+     * @param $citeProc
+     * @param $data
+     * @return void
+     */
     protected function setInTextLinks($citeProc, $data)
     {
-        $xpath = new \DOMXPath($this);
+        $xpath = new DOMXPath($this);
         $links = $xpath->query('//a[@class="bibr"]');
         foreach ($links as $link) {
             $linkId = $link->getAttribute('href');
             if ($linkId) {
-                $citeObject      = new \stdClass();
+                $citeObject      = new stdClass();
                 $citeObject->id  = str_replace("#", "", $linkId);
                 $link->nodeValue = $citeProc->render($data, "citation", [$citeObject]);
             }
@@ -331,7 +357,7 @@ class Document extends \DOMDocument
     public function saveAsValidHTML(string $documentTitle, bool $prettyPrint = false): string
     {
         if ($prettyPrint) {
-            $xpath = new \DOMXPath($this);
+            $xpath = new DOMXPath($this);
             $nodes = $xpath->query('//text()');
             foreach ($nodes as $node) {
                 $node->nodeValue = preg_replace("/[\\s]{2,}/", " ", $node->nodeValue);
@@ -355,6 +381,10 @@ class Document extends \DOMDocument
         return $htmlString;
     }
 
+    /**
+     * @param null $element
+     * @return false|string|string[]
+     */
     public function saveAsHTML($element = null)
     {
         $htmlString = $element ? $this->saveXML($element) : $this->saveXML($this);

@@ -1,9 +1,14 @@
 <?php
+
 namespace JATSParser\Back;
 
-
+use DOMElement;
 use JATSParser\Back\AbstractReference as AbstractReference;
 
+/**
+ * Class Conference
+ * @package JATSParser\Back
+ */
 class Conference extends AbstractReference
 {
 
@@ -19,7 +24,7 @@ class Conference extends AbstractReference
     /* @var $confDate string */
     private $confDate;
 
-    public function __construct(\DOMElement $reference)
+    public function __construct(DOMElement $reference)
     {
         parent::__construct($reference);
 
@@ -32,7 +37,7 @@ class Conference extends AbstractReference
     /**
      * @return string
      */
-    public function getId()
+    public function getId(): string
     {
         return $this->id;
     }
@@ -110,4 +115,3 @@ class Conference extends AbstractReference
         return $this->pubIdType;
     }
 }
-

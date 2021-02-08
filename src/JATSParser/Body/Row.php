@@ -1,10 +1,16 @@
 <?php
+
 namespace JATSParser\Body;
 
+use DOMElement;
 use JATSParser\Body\JATSElement as JATSElement;
 use JATSParser\Body\Document as Document;
 use JATSParser\Body\Cell as Cell;
 
+/**
+ * Class Row
+ * @package JATSParser\Body
+ */
 class Row extends AbstractElement
 {
 
@@ -17,7 +23,7 @@ class Row extends AbstractElement
      */
     private $type;
 
-    public function __construct(\DOMElement $rowNode)
+    public function __construct(DOMElement $rowNode)
     {
         parent::__construct($rowNode);
 

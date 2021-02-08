@@ -1,13 +1,19 @@
 <?php
+
 namespace JATSParser\HTML;
 
+use DOMElement;
 use JATSParser\Body\Table as JATSTable;
 use JATSParser\Body\Row as JATSRow;
 use JATSParser\HTML\Cell as Cell;
 use JATSParser\Body\Cell as JATSCell;
 use JATSParser\HTML\Text as HTMLText;
 
-class Table extends \DOMElement
+/**
+ * Class Table
+ * @package JATSParser\HTML
+ */
+class Table extends DOMElement
 {
 
     public function __construct()
@@ -15,6 +21,10 @@ class Table extends \DOMElement
         parent::__construct("table");
     }
 
+    /**
+     * @param JATSTable $jatsTable
+     * @return void
+     */
     public function setContent(JATSTable $jatsTable)
     {
         // Converting table head
@@ -100,10 +110,10 @@ class Table extends \DOMElement
     }
 
     /**
-     * @param $htmlHead \DOMElement
+     * @param DOMElement $htmlElement
      * @param $row JATSRow
      */
-    private function extractRowsAndCells(\DOMElement $htmlElement, JATSRow $row): void
+    private function extractRowsAndCells(DOMElement $htmlElement, JATSRow $row): void
     {
         $htmlRow = $this->ownerDocument->createElement("tr");
         $htmlElement->appendChild($htmlRow);

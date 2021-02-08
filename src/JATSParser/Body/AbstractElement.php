@@ -1,8 +1,14 @@
 <?php
+
 namespace JATSParser\Body;
 
+use DOMElement;
 use JATSParser\Body\Document as Document;
 
+/**
+ * Class AbstractElement
+ * @package JATSParser\Body
+ */
 abstract class AbstractElement implements JATSElement
 {
 
@@ -11,12 +17,12 @@ abstract class AbstractElement implements JATSElement
 
     protected $xpath;
 
-    protected function __construct(\DOMElement $domElement)
+    protected function __construct(DOMElement $domElement)
     {
         $this->xpath = Document::getXpath();
     }
 
-    protected function extractFromElement(string $xpathExpression, \DOMElement $domElement = null): ?string
+    protected function extractFromElement(string $xpathExpression, DOMElement $domElement = null): ?string
     {
         $nodeTextValue = null;
         $domElement !== null ? $searchNodes = $this->xpath->evaluate(
@@ -32,7 +38,7 @@ abstract class AbstractElement implements JATSElement
         return $nodeTextValue;
     }
 
-    protected function extractFromElements(string $xpathExpression, \DOMElement $domElement = null): ?array
+    protected function extractFromElements(string $xpathExpression, DOMElement $domElement = null): ?array
     {
         $nodeTextValues = array();
         $domElement !== null ? $searchNodes = $this->xpath->evaluate(
@@ -48,7 +54,7 @@ abstract class AbstractElement implements JATSElement
         return $nodeTextValues;
     }
 
-    protected function extractFormattedText(string $xpathExpression, \DOMElement $domElement = null): array
+    protected function extractFormattedText(string $xpathExpression, DOMElement $domElement = null): array
     {
         $nodeTextValues  = array();
         $xpathExpression .= "//text()";
@@ -66,7 +72,12 @@ abstract class AbstractElement implements JATSElement
         return $nodeTextValues;
     }
 
-    protected function extractTitleOrCaption(\DOMElement $element, $extractType): ?array
+    /**
+     * @param DOMElement $element
+     * @param $extractType
+     * @return array|null
+     */
+    protected function extractTitleOrCaption(DOMElement $element, $extractType): ?array
     {
         $titleOrCaption = array();
         $captionNodes   = $this->xpath->query(".//caption", $element);
@@ -91,10 +102,11 @@ abstract class AbstractElement implements JATSElement
         return $titleOrCaption;
     }
 
-    static function mappedBlockElements()
+    /**
+     * @return string[]
+     */
+    public static function mappedBlockElements(): array
     {
         return ["Figure" => "fig", "Table" => "table-wrap"];
     }
 }
-
-

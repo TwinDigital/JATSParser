@@ -1,8 +1,14 @@
 <?php
+
 namespace JATSParser\Back;
 
+use DOMElement;
 use JATSParser\Back\PersonGroup as PersonGroup;
 
+/**
+ * Class Collaboration
+ * @package JATSParser\Back
+ */
 class Collaboration implements PersonGroup
 {
 
@@ -12,7 +18,7 @@ class Collaboration implements PersonGroup
     /* @var $name string */
     private $name;
 
-    public function __construct(\DOMElement $collabNode)
+    public function __construct(DOMElement $collabNode)
     {
         $this->name = $collabNode->nodeValue;
 

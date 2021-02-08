@@ -1,19 +1,29 @@
 <?php
+
 namespace JATSParser\HTML;
 
+use DOMElement;
 use JATSParser\Body\Figure as JATSFigure;
 use JATSParser\Body\Par as JATSPar;
 use JATSParser\Body\Text as JATSText;
 use JATSParser\HTML\Par as Par;
 use JATSParser\HTML\Text as HTMLText;
 
-class Figure extends \DOMElement
+/**
+ * Class Figure
+ * @package JATSParser\HTML
+ */
+class Figure extends DOMElement
 {
     public function __construct()
     {
         parent::__construct("figure");
     }
 
+    /**
+     * @param JATSFigure $jatsFigure
+     * @return void
+     */
     public function setContent(JATSFigure $jatsFigure)
     {
         // Add image wrapped inside div (to avoid issues with overlapping by caption)
@@ -65,5 +75,4 @@ class Figure extends \DOMElement
             }
         }
     }
-
 }

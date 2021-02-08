@@ -1,10 +1,15 @@
 <?php
+
 namespace JATSParser\Back;
 
-
+use DOMElement;
 use JATSParser\Back\PersonGroup as PersonGroup;
 use JATSParser\Body\Document as Document;
 
+/**
+ * Class Individual
+ * @package JATSParser\Back
+ */
 class Individual implements PersonGroup
 {
 
@@ -17,7 +22,7 @@ class Individual implements PersonGroup
     /* @var $givenNames string */
     private $givenNames;
 
-    public function __construct(\DOMElement $individualNode)
+    public function __construct(DOMElement $individualNode)
     {
         $xpath = Document::getXpath();
 

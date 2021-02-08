@@ -1,10 +1,16 @@
 <?php
+
 namespace JATSParser\HTML;
 
+use DOMElement;
 use JATSParser\Body\Verse as JATSVerse;
 use JATSParser\HTML\Text as HTMLText;
 
-class Verse extends \DOMElement
+/**
+ * Class Verse
+ * @package JATSParser\HTML
+ */
+class Verse extends DOMElement
 {
 
     public function __construct()
@@ -12,6 +18,10 @@ class Verse extends \DOMElement
         parent::__construct("p");
     }
 
+    /**
+     * @param JATSVerse $jatsVerse
+     * @return void
+     */
     public function setContent(JATSVerse $jatsVerse)
     {
         if (!empty($jatsVerse->getContent())) {

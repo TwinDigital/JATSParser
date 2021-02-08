@@ -1,18 +1,24 @@
 <?php
+
 namespace JATSParser\Body;
 
+use DOMElement;
 use JATSParser\Body\Table as Table;
 use JATSParser\Body\Figure as Figure;
 use JATSParser\Body\Listing as Listing;
 use JATSParser\Body\Par as Par;
 use JATSParser\Body\Section as Section;
 
+/**
+ * Class DispQuote
+ * @package JATSParser\Body
+ */
 class DispQuote extends Section
 {
 
-    private $attrib = array();
+    private $attrib;
 
-    function __construct(\DOMElement $element)
+    public function __construct(DOMElement $element)
     {
         parent::__construct($element);
 

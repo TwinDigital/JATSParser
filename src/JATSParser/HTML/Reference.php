@@ -1,6 +1,6 @@
 <?php
-namespace JATSParser\HTML;
 
+namespace JATSParser\HTML;
 
 use JATSParser\Back\AbstractReference;
 use JATSParser\Back\Individual;
@@ -8,12 +8,16 @@ use JATSParser\Back\Journal;
 use JATSParser\Back\Book;
 use JATSParser\Back\Chapter;
 use JATSParser\Back\Conference;
+use stdClass;
 
-
+/**
+ * Class Reference
+ * @package JATSParser\HTML
+ */
 class Reference
 {
 
-    /** @var $content \stdClass */
+    /** @var $content stdClass */
     private $content;
     private $jatsReference;
 
@@ -26,7 +30,7 @@ class Reference
     public function setContent()
     {
         if (!isset($this->content)) {
-            $this->content = new \stdClass();
+            $this->content = new stdClass();
         }
 
         $this->setSimpleProperty('id', 'getId');
@@ -35,7 +39,7 @@ class Reference
             foreach ($this->jatsReference->getAuthors() as $individual) {
                 if (get_class($individual) == 'JATSParser\Back\Individual') {
                     /** @var $individual Individual */
-                    $author = new \stdClass();
+                    $author = new stdClass();
                     if (!empty($individual->getGivenNames())) {
                         $author->family = $individual->getSurname();
                     }
@@ -53,7 +57,7 @@ class Reference
             foreach ($this->jatsReference->getEditors() as $individual) {
                 if (get_class($individual) == 'JATSParser\Back\Individual') {
                     /** @var $individual Individual */
-                    $editor = new \stdClass();
+                    $editor = new stdClass();
                     if (!empty($individual->getGivenNames())) {
                         $editor->family = $individual->getSurname();
                     }
@@ -81,10 +85,12 @@ class Reference
         $this->setSimpleProperty('page-first', 'getFpage');
         $this->setSimpleProperty('page', 'getPages');
 
-        if (method_exists($this->jatsReference, 'getPubIdType') && array_key_exists(
+        if (
+            method_exists($this->jatsReference, 'getPubIdType') && array_key_exists(
                 'doi',
                 $this->jatsReference->getPubIdType()
-            )) {
+            )
+        ) {
             $this->content->{'DOI'} = $this->jatsReference->getPubIdType()['doi'];
         }
 
@@ -97,27 +103,23 @@ class Reference
 
         switch (get_class($this->jatsReference)) {
             case "JATSParser\Back\Journal":
-
                 /* @var $jatsReference Journal */
                 $this->content->type = 'article-journal';
                 break;
 
             case "JATSParser\Back\Book":
-
                 /* @var $jatsReference Book */
                 $this->content->type = 'book';
 
                 break;
 
             case "JATSParser\Back\Chapter":
-
                 /* @var $jatsReference Chapter */
                 $this->content->type = 'chapter';
 
                 break;
 
             case "JATSParser\Back\Conference":
-
                 /* @var $jatsReference Conference */
                 $this->content->type = 'conference';
 
@@ -126,9 +128,9 @@ class Reference
     }
 
     /**
-     * @return array
+     * @return stdClass
      */
-    public function getContent(): \stdClass
+    public function getContent(): stdClass
     {
         return $this->content;
     }
@@ -148,7 +150,7 @@ class Reference
     protected function setDate(string $property, string $method): void
     {
         if (method_exists($this->jatsReference, $method) && !empty($this->jatsReference->$method())) {
-            $date                       = new \stdClass();
+            $date                       = new stdClass();
             $date->{'date-parts'}[][]   = $this->jatsReference->$method();
             $this->content->{$property} = $date;
         }

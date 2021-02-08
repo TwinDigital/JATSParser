@@ -2,13 +2,18 @@
 
 namespace JATSParser\HTML;
 
-use JATSParser\Body\JATSElement;
+use DOMElement;
+use DOMNode;
 use JATSParser\Body\Text as JATSText;
 
+/**
+ * Class Text
+ * @package JATSParser\HTML
+ */
 class Text
 {
 
-    public static function extractText(JATSText $jatsText, \DOMNode $domElement): void
+    public static function extractText(JATSText $jatsText, DOMNode $domElement): void
     {
         // Get DOMDocument
         $domDocument = $domElement->ownerDocument;
@@ -97,7 +102,7 @@ class Text
             }
             // Dealing with complex cases -> text with several properties
         } else {
-            /* @var \DOMElement[] $prevElements array of DOMElements */
+            /* @var DOMElement[] $prevElements array of DOMElements */
             $prevElements = array();
             foreach ($typeArray as $key => $type) {
                 if (!is_array($type)) {
@@ -113,6 +118,9 @@ class Text
                     }
                 }
 
+                if (!isset($nodeElement)) {
+                    continue;
+                }
                 array_push($prevElements, $nodeElement);
 
                 if ($key === 0) {
@@ -130,7 +138,11 @@ class Text
         }
     }
 
-    public static function checkPunctuation(string $label)
+    /**
+     * @param string $label
+     * @return string
+     */
+    public static function checkPunctuation(string $label): string
     {
         $label = trim($label);
         if (preg_match("/\.$|:$/", $label, $matches) === 0) {

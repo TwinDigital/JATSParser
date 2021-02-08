@@ -1,11 +1,17 @@
 <?php
+
 namespace JATSParser\HTML;
 
+use DOMElement;
 use JATSParser\Body\Cell as JATSCell;
 use JATSParser\Body\Text as JATSText;
 use JATSParser\HTML\Text as HTMLText;
 
-class Cell extends \DOMElement
+/**
+ * Class Cell
+ * @package JATSParser\HTML
+ */
+class Cell extends DOMElement
 {
 
     public function __construct(string $type)
@@ -13,6 +19,10 @@ class Cell extends \DOMElement
         parent::__construct($type);
     }
 
+    /**
+     * @param JATSCell $cell
+     * @return void
+     */
     public function setContent(JATSCell $cell)
     {
         if ($cell->getColspan() > 1) {

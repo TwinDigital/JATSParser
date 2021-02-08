@@ -1,11 +1,17 @@
 <?php
+
 namespace JATSParser\Body;
 
+use DOMElement;
 use JATSParser\Body\Table as Table;
 use JATSParser\Body\Figure as Figure;
 use JATSParser\Body\Listing as Listing;
 use JATSParser\Body\Par as Par;
 
+/**
+ * Class Section
+ * @package JATSParser\Body
+ */
 class Section extends AbstractElement
 {
 
@@ -25,7 +31,7 @@ class Section extends AbstractElement
 
     private $childSectionsTitles = array();
 
-    function __construct(\DOMElement $section)
+    public function __construct(DOMElement $section)
     {
         parent::__construct($section);
 
@@ -63,7 +69,11 @@ class Section extends AbstractElement
     }
 
 
-    private function extractType(\DOMElement $section)
+    /**
+     * @param DOMElement $section
+     * @return void
+     */
+    private function extractType(DOMElement $section)
     {
         $parentElements = $this->xpath->query("parent::sec", $section);
         if (!is_null($parentElements)) {
@@ -74,7 +84,11 @@ class Section extends AbstractElement
         }
     }
 
-    private function ifHasSections(\DOMElement $section)
+    /**
+     * @param DOMElement $section
+     * @return void
+     */
+    private function ifHasSections(DOMElement $section)
     {
         $childSections = $this->xpath->query("sec", $section);
         if ($childSections->length > 0) {
@@ -88,7 +102,11 @@ class Section extends AbstractElement
         }
     }
 
-    private function extractContent(\DOMElement $section)
+    /**
+     * @param DOMElement $section
+     * @return void
+     */
+    private function extractContent(DOMElement $section)
     {
         $content      = array();
         $sectionNodes = $this->xpath->evaluate("./node()", $section);
@@ -137,5 +155,4 @@ class Section extends AbstractElement
         }
         $this->content = $content;
     }
-
 }

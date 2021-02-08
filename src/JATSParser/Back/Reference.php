@@ -1,6 +1,11 @@
 <?php
+
 namespace JATSParser\Back;
 
+/**
+ * Interface Reference
+ * @package JATSParser\Back
+ */
 interface Reference
 {
 
@@ -13,5 +18,4 @@ interface Reference
     public function getEditors();
 
     public function getYear();
-
 }

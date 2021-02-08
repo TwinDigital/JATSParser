@@ -1,12 +1,17 @@
 <?php
+
 namespace JATSParser\HTML;
 
+use DOMElement;
 use JATSParser\Body\Media as JATSMedia;
 use JATSParser\HTML\Par as Par;
 use JATSParser\HTML\Text as HTMLText;
 
-
-class Media extends \DOMElement
+/**
+ * Class Media
+ * @package JATSParser\HTML
+ */
+class Media extends DOMElement
 {
 
     public function __construct()
@@ -14,6 +19,10 @@ class Media extends \DOMElement
         parent::__construct("div");
     }
 
+    /**
+     * @param JATSMedia $jatsMedia
+     * @return void
+     */
     public function setContent(JATSMedia $jatsMedia)
     {
         $this->setAttribute("class", "media-wrapper");

@@ -1,9 +1,16 @@
 <?php
+
 namespace JATSParser\Body;
 
+use DOMElement;
+use DOMText;
 use JATSParser\Body\JATSElement as JATSElement;
 use JATSParser\Body\Document as Document;
 
+/**
+ * Class Text
+ * @package JATSParser\Body
+ */
 class Text implements JATSElement
 {
 
@@ -22,7 +29,7 @@ class Text implements JATSElement
 
     private static $nodeCheck = array("bold", "italic", "sup", "sub", "xref", "underline", "monospace", "ext-link");
 
-    public function __construct(\DOMText $paragraphContent)
+    public function __construct(DOMText $paragraphContent)
     {
         $this->content = $paragraphContent->textContent;
         $this->extractTextNodeModifiers($paragraphContent);
@@ -58,11 +65,11 @@ class Text implements JATSElement
     }
 
     /**
-     * @param \DOMText \DOMElement
+     * @param DOMText \DOMElement
      */
     private function extractTextNodeModifiers($paragraphContent)
     {
-        /* @var $parentNode \DOMElement */
+        /* @var $parentNode DOMElement */
         $parentNode = $paragraphContent->parentNode;
         if (in_array($parentNode->nodeName, self::$nodeCheck)) {
             $this->extractTextNodeModifiers($parentNode);

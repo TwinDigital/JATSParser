@@ -1,8 +1,14 @@
 <?php
+
 namespace JATSParser\Body;
 
+use DOMElement;
 use JATSParser\Body\Document as Document;
 
+/**
+ * Class Figure
+ * @package JATSParser\Body
+ */
 class Figure extends AbstractElement
 {
 
@@ -21,7 +27,7 @@ class Figure extends AbstractElement
     /* @var $title array */
     private $title;
 
-    public function __construct(\DOMElement $figureElement)
+    public function __construct(DOMElement $figureElement)
     {
         parent::__construct($figureElement);
 

@@ -1,21 +1,30 @@
 <?php
+
 namespace JATSParser\PDF;
 
-use JATSParser\Body\Document as JATSDocument;
-use JATSParser\HTML\Document as HTMLDocument;
+use TCPDF;
+use TCPDF_IMAGES;
 
 require_once(__DIR__ . '/../../../vendor/tecnickcom/tcpdf/tcpdf.php');
 
 
-class TCPDFDocument extends \TCPDF
+/**
+ * Class TCPDFDocument
+ * @phpcs:ignoreFile
+ * @package JATSParser\PDF
+ */
+class TCPDFDocument extends TCPDF
 {
 
-    function __construct(string $htmlDocument = null)
+    public function __construct(string $htmlDocument = null)
     {
         // setting up PDF
         parent::__construct(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
     }
 
+    /**
+     * @return void
+     */
     public function Header()
     {
         if ($this->header_xobjid === false) {
@@ -30,7 +39,7 @@ class TCPDFDocument extends \TCPDF
                 $this->x = $this->original_lMargin;
             }
             if (($headerdata['logo']) and ($headerdata['logo'] != K_BLANK_IMAGE)) {
-                $imgtype                  = \TCPDF_IMAGES::getImageFileType($headerdata['logo']);
+                $imgtype                  = TCPDF_IMAGES::getImageFileType($headerdata['logo']);
                 $headerdata['logo_width'] = 12;
                 if (($imgtype == 'eps') or ($imgtype == 'ai')) {
                     $this->ImageEps($headerdata['logo'], '', '', $headerdata['logo_width']);
@@ -55,7 +64,7 @@ class TCPDFDocument extends \TCPDF
             // header title
             $this->SetFont('dejavuserif', 'BI', 11);
             $this->SetX($header_x);
-            $this->Cell($cw, $cell_height, $headerdata['title'], 0, 1, '', 0, '', 0);
+            $this->Cell($cw, $cell_height, $headerdata['title'], 0, 1, '', 0);
             // header string
             $this->SetFont('dejavuserif', '', 9);
             $this->SetX($header_x);
@@ -114,5 +123,4 @@ class TCPDFDocument extends \TCPDF
             $this->header_xobjid = false;
         }
     }
-
 }

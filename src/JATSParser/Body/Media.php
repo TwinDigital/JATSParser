@@ -1,8 +1,14 @@
 <?php
+
 namespace JATSParser\Body;
 
+use DOMElement;
 use JATSParser\Body\Document as Document;
 
+/**
+ * Class Media
+ * @package JATSParser\Body
+ */
 class Media extends AbstractElement
 {
 
@@ -21,7 +27,7 @@ class Media extends AbstractElement
     /* @var $title array */
     private $title;
 
-    public function __construct(\DOMElement $mediaElement)
+    public function __construct(DOMElement $mediaElement)
     {
         parent::__construct($mediaElement);
 
@@ -71,5 +77,4 @@ class Media extends AbstractElement
     {
         return $this->title;
     }
-
 }

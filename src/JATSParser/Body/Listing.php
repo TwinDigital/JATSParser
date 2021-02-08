@@ -1,10 +1,17 @@
 <?php
+
 namespace JATSParser\Body;
 
+use DOMElement;
+use DOMNode;
 use JATSParser\Body\JATSElement as JATSElement;
 use JATSParser\Body\Document as Document;
 use JATSParser\Body\Text as Text;
 
+/**
+ * Class Listing
+ * @package JATSParser\Body
+ */
 class Listing extends AbstractElement
 {
 
@@ -20,17 +27,18 @@ class Listing extends AbstractElement
 
     private $content;
 
-    public function __construct(\DOMElement $list)
+    public function __construct(DOMElement $list)
     {
-        $xpath   = Document::getXpath();
-        $content = array();
+        parent::__construct($list);
+        $this->xpath = Document::getXpath();
+        $content     = array();
         $list->hasAttribute("list-type") ? $this->style = $list->getAttribute("list-type") : $this->style = "unordered";
         $this->type = self::listElementLevel($list);
 
-        $listItemNodes = $xpath->query("list-item", $list);
+        $listItemNodes = $this->xpath->query("list-item", $list);
         foreach ($listItemNodes as $listItemNode) {
             $listItem        = array(); // represents list item
-            $insideListItems = $xpath->query("child::node()", $listItemNode);
+            $insideListItems = $this->xpath->query("child::node()", $listItemNode);
 
             foreach ($insideListItems as $insideJatsListItem) {
                 if ($insideJatsListItem->nodeName === "p") {
@@ -40,9 +48,12 @@ class Listing extends AbstractElement
                     $insideListing = new Listing($insideJatsListItem);
                     $listItem[]    = $insideListing;
                 } else {
-                    $listItemTexts = $xpath->query("self::text()|.//text()", $insideJatsListItem);
+                    $listItemTexts = $this->xpath->query("self::text()|.//text()", $insideJatsListItem);
                     foreach ($listItemTexts as $listItemText) {
-                        /* We must ensure that picking up Text Node from the current list level -> avoiding parsing nested lists */
+                        /**
+                         * We must ensure that picking up Text
+                         * Node from the current list level -> avoiding parsing nested lists
+                         */
                         if (self::listElementLevel($listItemText) === $this->type) {
                             $jatsText   = new Text($listItemText);
                             $listItem[] = $jatsText;
@@ -79,13 +90,12 @@ class Listing extends AbstractElement
     }
 
     /**
-     * @return boolean
+     * @param DOMNode $textNode
+     * @return bool
      */
 
-    private function listElementLevel(\DOMNode $textNode)
+    private function listElementLevel(DOMNode $textNode): bool
     {
-        $count = preg_match_all("/\blist\b[^-]|\blist\b$/", $textNode->getNodePath(), $mathes);
-        return $count;
+        return preg_match_all("/\blist\b[^-]|\blist\b$/", $textNode->getNodePath(), $mathes);
     }
-
 }

@@ -1,15 +1,21 @@
 <?php
+
 namespace JATSParser\Body;
 
+use DOMElement;
 use JATSParser\Body\JATSElement as JATSElement;
 use JATSParser\Body\Text as Text;
 use JATSParser\Body\Par as Par;
 
+/**
+ * Class Cell
+ * @package JATSParser\Body
+ */
 class Cell extends AbstractElement
 {
 
     /* @var array Can contain Par and Text */
-    private $content = array();
+    private $content;
 
     /* @var $type string */
     private $type;
@@ -20,7 +26,7 @@ class Cell extends AbstractElement
     /* @var $rowspan int */
     private $rowspan;
 
-    function __construct(\DOMElement $cellNode)
+    public function __construct(DOMElement $cellNode)
     {
         parent::__construct($cellNode);
 

@@ -1,8 +1,14 @@
 <?php
+
 namespace JATSParser\Back;
 
+use DOMElement;
 use JATSParser\Back\AbstractReference as AbstractReference;
 
+/**
+ * Class Journal
+ * @package JATSParser\Back
+ */
 class Journal extends AbstractReference
 {
 
@@ -24,7 +30,7 @@ class Journal extends AbstractReference
     /* @var $lpage string */
     private $lpage;
 
-    public function __construct(\DOMElement $reference)
+    public function __construct(DOMElement $reference)
     {
         parent::__construct($reference);
 
@@ -39,7 +45,7 @@ class Journal extends AbstractReference
     /**
      * @return string
      */
-    public function getId()
+    public function getId(): string
     {
         return $this->id;
     }

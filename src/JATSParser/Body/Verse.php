@@ -1,16 +1,22 @@
 <?php
+
 namespace JATSParser\Body;
 
+use DOMElement;
 use JATSParser\Body\Document as Document;
 use JATSParser\Body\Text as Text;
 
+/**
+ * Class Verse
+ * @package JATSParser\Body
+ */
 class Verse extends AbstractElement
 {
 
     private $content = array();
     private $attrib;
 
-    public function __construct(\DOMElement $element)
+    public function __construct(DOMElement $element)
     {
         parent::__construct($element);
 

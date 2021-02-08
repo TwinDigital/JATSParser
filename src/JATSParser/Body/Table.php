@@ -1,11 +1,14 @@
 <?php
+
 namespace JATSParser\Body;
 
-use JATSParser\Body\JATSElement as JATSElement;
-use JATSParser\Body\Document as Document;
+use DOMElement;
 use JATSParser\Body\Row as Row;
-use JATSParser\Body\Text as Text;
 
+/**
+ * Class Table
+ * @package JATSParser\Body
+ */
 class Table extends AbstractElement
 {
 
@@ -18,19 +21,16 @@ class Table extends AbstractElement
     /* @var $content array */
     private $content;
 
-    /* @var $hasHead bool */
-    private $hasHead;
-
-    /* @var $hasBody bool */
-    private $hasBody;
-
     /* @var $title array */
     private $title;
 
     /* @var $notes array */
     private $notes;
 
-    public function __construct(\DOMElement $tableWraper)
+    /* @var $link array */
+    private $link;
+
+    public function __construct(DOMElement $tableWraper)
     {
         parent::__construct($tableWraper);
 
@@ -69,22 +69,26 @@ class Table extends AbstractElement
     }
 
 
-    private function extractContent(\DOMElement $tableWraper)
+    /**
+     * @param DOMElement $tableWraper
+     * @return void
+     */
+    private function extractContent(DOMElement $tableWraper)
     {
         $content = array();
 
         $tableHeadNode = $this->xpath->query(".//thead", $tableWraper);
         if ($tableHeadNode->length > 0) {
-            $this->hasHead = true;
+            $hasHead = true;
         } else {
-            $this->hasHead = false;
+            $hasHead = false;
         }
 
         $tableBodyNode = $this->xpath->query(".//tbody", $tableWraper);
         if ($tableBodyNode->length > 0) {
-            $this->hasBody = true;
+            $hasBody = true;
         } else {
-            $this->hasBody = false;
+            $hasBody = false;
         }
 
         $rowNodes = $this->xpath->query(".//tr", $tableWraper);
@@ -94,5 +98,4 @@ class Table extends AbstractElement
         }
         $this->content = $content;
     }
-
 }

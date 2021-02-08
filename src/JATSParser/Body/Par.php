@@ -1,17 +1,24 @@
 <?php
+
 namespace JATSParser\Body;
 
+use DOMElement;
+use DOMXPath;
 use JATSParser\Body\JATSElement as JATSElement;
 use JATSParser\Body\Document as Document;
 use JATSParser\Body\Text as Text;
 
+/**
+ * Class Par
+ * @package JATSParser\Body
+ */
 class Par implements JATSElement
 {
 
-    private $content = array();
+    private $content;
     private $blockElements = array();
 
-    function __construct(\DOMElement $paragraph)
+    public function __construct(DOMElement $paragraph)
     {
         $xpath = Document::getXpath();
 
@@ -33,17 +40,21 @@ class Par implements JATSElement
         return $this->content;
     }
 
-    public function getBlockElements()
+    /**
+     * @return array
+     */
+    public function getBlockElements(): array
     {
         return $this->blockElements;
     }
 
     /**
-     * @param \DOMElement $paragraph
-     * @param \DOMXPath $xpath
-     * @brief Method aimed at finding block elements inside the paragraph, save as an array property and delete them from the DOM
+     * @param DOMElement $paragraph
+     * @param DOMXPath $xpath
+     * @brief Method aimed at finding block elements inside the paragraph,
+     * save as an array property and delete them from the DOM
      */
-    private function findExtractRemoveBlockElements(\DOMElement $paragraph, \DOMXPath $xpath): void
+    private function findExtractRemoveBlockElements(DOMElement $paragraph, DOMXPath $xpath): void
     {
         $expression            = "";
         $blockNodesMappedArray = AbstractElement::mappedBlockElements();

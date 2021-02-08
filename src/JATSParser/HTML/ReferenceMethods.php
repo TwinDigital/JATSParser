@@ -1,14 +1,20 @@
 <?php
+
 namespace JATSParser\HTML;
 
+use DOMElement;
 use JATSParser\Back\AbstractReference;
 use JATSParser\Back\Individual;
 use JATSParser\Back\Collaboration;
 
+/**
+ * Class ReferenceMethods
+ * @package JATSParser\HTML
+ */
 class ReferenceMethods
 {
 
-    public static function extractAuthors(AbstractReference $jatsReference, \DOMElement $domElement): void
+    public static function extractAuthors(AbstractReference $jatsReference, DOMElement $domElement): void
     {
         foreach ($jatsReference->getAuthors() as $key => $author) {
             if (get_class($author) === "JATSParser\Back\Individual") {
@@ -45,7 +51,7 @@ class ReferenceMethods
         }
     }
 
-    public static function extractLinks(AbstractReference $jatsReference, \DOMElement $domElement): void
+    public static function extractLinks(AbstractReference $jatsReference, DOMElement $domElement): void
     {
         if ($jatsReference->getUrl() !== "" && !empty($jatsReference->getPubIdType())) {
             $urlLink = $domElement->ownerDocument->createElement('a');
@@ -95,7 +101,12 @@ class ReferenceMethods
         }
     }
 
-    public static function extractEditors(AbstractReference $jatsReference, \DOMElement $domElement)
+    /**
+     * @param AbstractReference $jatsReference
+     * @param DOMElement $domElement
+     * @return void
+     */
+    public static function extractEditors(AbstractReference $jatsReference, DOMElement $domElement)
     {
         foreach ($jatsReference->getEditors() as $key => $author) {
             if (get_class($author) === "JATSParser\Back\Individual") {
