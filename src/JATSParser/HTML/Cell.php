@@ -15,12 +15,12 @@ class Cell extends \DOMElement
 
     public function setContent(JATSCell $cell)
     {
-		if ($cell->getColspan()) {
+        if ($cell->getColspan() > 1) {
             $this->setAttribute("colspan", $cell->getColspan());
         }
 
 
-		if ($cell->getRowspan()) {
+        if ($cell->getRowspan() > 1) {
             $this->setAttribute("rowspan", $cell->getRowspan());
         }
 
