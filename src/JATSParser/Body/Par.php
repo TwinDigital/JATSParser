@@ -78,7 +78,9 @@ class Par implements JATSElement
                 $this->blockElements[] = $jatsBlockEl;
             }
 
-            $blockElement->parentNode->removeChild($blockElement);
+            if (isset($blockElement->parentNode)) {
+                $blockElement->parentNode->removeChild($blockElement);
+            }
         }
     }
 }

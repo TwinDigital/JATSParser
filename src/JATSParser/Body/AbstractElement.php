@@ -29,6 +29,9 @@ abstract class AbstractElement implements JATSElement
             $xpathExpression,
             $domElement
         ) : $searchNodes = $this->xpath->evaluate($xpathExpression);
+        if (!$searchNodes || !is_object($searchNodes) || !property_exists($searchNodes, 'length')) {
+            return null;
+        }
         if ($searchNodes->length > 0) {
             foreach ($searchNodes as $searchNode) {
                 $nodeTextValue = $searchNode->nodeValue;
@@ -107,6 +110,6 @@ abstract class AbstractElement implements JATSElement
      */
     public static function mappedBlockElements(): array
     {
-        return ["Figure" => "fig", "Table" => "table-wrap"];
+        return ["Figure" => "fig", "Table" => "table-wrap", "Listing" => "list"];
     }
 }
