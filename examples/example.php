@@ -9,7 +9,7 @@ use JATSParser\PDF\TCPDFDocument;
 /*
  * @var $jatsDocument JATSDocument object representation of JATS XML document
  */
-$jatsDocument = new JATSDocument("example.xml");
+$jatsDocument = new JATSDocument(__DIR__ . '/example.xml');
 
 /*
  * @var $htmlDocument HTMLDocument conversion to HTML
@@ -24,12 +24,16 @@ $htmlDocument->saveAsValidHTMLFile('example.html', 'Arbitrary HTML document titl
 /*
  * @var $pdfDocument TCPDFDocument class that extends TCDPF
  */
-$pdfDocument = new TCPDFDocument();
-$pdfDocument->AddPage();
-$pdfDocument->SetFont('dejavusans');
-$htmlString = $htmlDocument->getHtmlForTCPDF();
-$pdfHeaderLogo = __DIR__ . "/../logo/logo.jpg";
-$pdfDocument->SetHeaderData($pdfHeaderLogo, PDF_HEADER_LOGO_WIDTH, "Some Text Here", "Another text here");
-$pdfDocument->writeHTML($htmlString, true, false, true, false, '');
-$pdfDocument->Output(__DIR__ . '/example.pdf', 'F');
-
+try {
+    $pdfDocument = new TCPDFDocument();
+    $pdfDocument->AddPage();
+    $pdfDocument->SetFont('dejavusans');
+    $htmlString    = $htmlDocument->getHtmlForTCPDF();
+    $pdfHeaderLogo = __DIR__ . "/../logo/logo.jpg";
+    $pdfDocument->SetHeaderData($pdfHeaderLogo, PDF_HEADER_LOGO_WIDTH, "Some Text Here", "Another text here");
+    $pdfDocument->writeHTML($htmlString, true, false, true, false, '');
+    $pdfDocument->Output(__DIR__ . '/example.pdf', 'F');
+} catch (\Exception $exception) {
+    echo 'Something went wrong :(' . PHP_EOL;
+    echo $exception->getMessage();
+}
