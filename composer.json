@@ -7,6 +7,10 @@
     {
       "name": "Vitaliy Bezsheiko",
       "email": "vitaliybezsh@gmail.com"
+    },
+    {
+      "name": "Lucien Plattel",
+      "email": "lucien@twindigital.nl"
     }
   ],
   "minimum-stability": "dev",
