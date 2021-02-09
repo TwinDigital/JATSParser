@@ -1,5 +1,5 @@
 {
-    "name": "doc/jatsParser",
+  "name": "doc/jatsparser",
     "description": "JATS XML parser",
     "type": "library",
     "license": "GPLv3",
