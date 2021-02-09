@@ -24,7 +24,7 @@ class Text
         // Dealing with simple text (without any properties)
         $nodeTypes = $jatsText->getType();
         if (in_array("normal", $nodeTypes)) {
-            $textNode = $domDocument->createTextNode(trim($jatsText->getContent()));
+            $textNode = $domDocument->createTextNode($jatsText->getContent());
             $domElement->appendChild($textNode);
             unset($nodeTypes);
         }
