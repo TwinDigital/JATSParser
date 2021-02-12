@@ -209,12 +209,41 @@ class Article
             );
         }
 
-        $refListNodes = $xpath->query('/article/back/ref-list/ref-list');
-        foreach ($refListNodes as $refListNode) {
-            $this->xml->appendChild(
-                $this->dom->importNode($refListNode, true)
-            );
+        $refNodes       = $xpath->query('/article/back/ref-list/ref-list/ref');
+        $newRefListNode = $this->dom->createElement('ref-list');
+        foreach ($refNodes as $refNode) {
+            /** @var DOMElement $refNode */
+            $cdataString = '';
+            foreach ($xpath->evaluate('mixed-citation/node()', $refNode) as $item) {
+                if (!is_a($item, DOMNode::class)) {
+                    continue;
+                }
+                /** @var DOMElement $item */
+                if ($item->nodeName === 'ext-link') {
+                    $cdataString .= '<a href="' . $item->getAttribute('xlink:href') . '" target="_blank">';
+                    $cdataString .= trim($item->nodeValue);
+                    $cdataString .= '</a>';
+                    continue;
+                }
+                $cdataString .= $item->nodeValue;
+            }
+            if ($cdataString) {
+                $newRefNode = $this->dom->createElement('ref');
+                $newRefNode->setAttribute('id', $refNode->getAttribute('id'));
+                $labelNodes = $xpath->query('label', $refNode);
+                if ($labelNodes->length > 0) {
+                    $newRefNode->appendChild(
+                        $this->dom->createElement('label', $labelNodes->item(0)->nodeValue)
+                    );
+                }
+                $citationCdata   = $this->dom->createCDATASection($cdataString);
+                $citationElement = $this->dom->createElement('mixed-citation');
+                $citationElement->appendChild($citationCdata);
+                $newRefNode->appendChild($citationElement);
+                $newRefListNode->appendChild($newRefNode);
+            }
         }
+        $this->xml->appendChild($newRefListNode);
     }
 
     /**
